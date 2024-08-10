@@ -46,6 +46,20 @@ export const getDocument = async ({ roomId, userId }: { roomId: string, userId: 
     }
 }
 
+export const getDocuments = async (email: string) => {
+    try {
+        const rooms = await liveblocks.getRooms({ userId: email })
+        // const hasAccess = Object.keys(room.usersAccesses).includes(userId)
+
+        // if (!hasAccess)
+        //     throw new Error('You do not have access to this document!')
+
+        return parseStringify(rooms)
+    } catch (error) {
+        console.log(`Error in retrieving a rooms : ${error}`)
+    }
+}
+
 export const updateDocument = async (roomId: string, title: string) => {
     try {
         const updateRoom = await liveblocks.updateRoom(roomId, {
