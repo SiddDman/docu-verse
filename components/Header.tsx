@@ -18,7 +18,7 @@ const Header = ({ children, className }: HeaderProps) => {
                     alt="DocuVerse Logo"
                     width={32}
                     height={32}
-                    className="mr-2 md:hidden"
+                    className="mr-2 gap-3 md:hidden"
                 />
             </Link>
             {children}
