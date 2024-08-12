@@ -5,6 +5,7 @@ import { Button } from "./ui/button"
 import { removeCollaborator, updateDocAccess } from "@/lib/actions/rooms.actions"
 
 const Collaborator = ({ roomId, creatorId, email, collaborator, user }: CollaboratorProps) => {
+
     const [userType, setUserType] = useState(collaborator.userType || 'viewer')
     const [loading, setLoading] = useState(false)
 
@@ -13,7 +14,7 @@ const Collaborator = ({ roomId, creatorId, email, collaborator, user }: Collabor
         await updateDocAccess({
             roomId,
             email,
-            userType: userType as UserType,
+            userType: type as UserType,
             updatedBy: user
         })
         setLoading(false)
@@ -56,7 +57,7 @@ const Collaborator = ({ roomId, creatorId, email, collaborator, user }: Collabor
             ) : (
                 <div className="flex items-center">
                     <UserTypeSelector
-                        userType={userType}
+                        userType={userType as UserType}
                         setUserType={setUserType || 'viewer'}
                         onClickHandler={shareDocHandler}
                     />

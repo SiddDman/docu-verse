@@ -75,10 +75,11 @@ export const updateDocAccess = async ({ roomId, email, userType, updatedBy }: Sh
         const usersAccesses: RoomAccesses = {
             [email]: getAccessType(userType) as AccessType,
         }
+
         const room = await liveblocks.updateRoom(roomId, {
             usersAccesses
         })
-        
+
         if (room) {
             const notificationId = nanoid()
 
@@ -99,7 +100,6 @@ export const updateDocAccess = async ({ roomId, email, userType, updatedBy }: Sh
 
         revalidatePath(`/documents/${roomId}`)
         return parseStringify(room)
-
     } catch (error) {
         console.log(`Error while updating room access for a user: ${error}`)
     }
@@ -110,6 +110,7 @@ export const removeCollaborator = async ({ roomId, email }: { roomId: string, em
         const room = await liveblocks.getRoom(roomId)
         if (room.metadata.email === email)
             throw new Error('You cannot remove yourself as a collaborator from the Doc')
+        
         const updatedRoom = await liveblocks.updateRoom(roomId, {
             usersAccesses: {
                 [email]: null
