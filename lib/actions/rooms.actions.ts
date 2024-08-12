@@ -5,8 +5,6 @@ import { liveblocks } from '../liveblocks';
 import { revalidatePath } from 'next/cache';
 import { getAccessType, parseStringify } from '../utils';
 import { redirect } from 'next/navigation'
-import { AwardIcon } from 'lucide-react';
-import { title } from 'process';
 
 export const createDocument = async ({ userId, email }: CreateDocumentParams) => {
     const roomId = nanoid()
@@ -51,10 +49,6 @@ export const getDocument = async ({ roomId, userId }: { roomId: string, userId: 
 export const getDocuments = async (email: string) => {
     try {
         const rooms = await liveblocks.getRooms({ userId: email })
-        // const hasAccess = Object.keys(room.usersAccesses).includes(userId)
-
-        // if (!hasAccess)
-        //     throw new Error('You do not have access to this document!')
 
         return parseStringify(rooms)
     } catch (error) {
@@ -70,7 +64,7 @@ export const updateDocument = async (roomId: string, title: string) => {
             }
         })
         revalidatePath(`/documents/${roomId}`)
-        return parseStringify(updateDocument)
+        return parseStringify(updateRoom)
     } catch (error) {
         console.log(`Error while updating room title: ${error}`)
     }
@@ -84,6 +78,7 @@ export const updateDocAccess = async ({ roomId, email, userType, updatedBy }: Sh
         const room = await liveblocks.updateRoom(roomId, {
             usersAccesses
         })
+        
         if (room) {
             const notificationId = nanoid()
 

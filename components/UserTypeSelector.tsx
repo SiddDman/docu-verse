@@ -22,7 +22,6 @@ const UserTypeSelector = ({ userType, setUserType, onClickHandler }: UserTypeSel
                 <SelectItem value="editor" className="shad-select-item">Editor</SelectItem>
             </SelectContent>
         </Select>
-
     )
 }
 
