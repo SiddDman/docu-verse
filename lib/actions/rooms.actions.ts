@@ -5,6 +5,8 @@ import { liveblocks } from '../liveblocks';
 import { revalidatePath } from 'next/cache';
 import { getAccessType, parseStringify } from '../utils';
 import { redirect } from 'next/navigation'
+import { AwardIcon } from 'lucide-react';
+import { title } from 'process';
 
 export const createDocument = async ({ userId, email }: CreateDocumentParams) => {
     const roomId = nanoid()
@@ -83,7 +85,21 @@ export const updateDocAccess = async ({ roomId, email, userType, updatedBy }: Sh
             usersAccesses
         })
         if (room) {
+            const notificationId = nanoid()
 
+            await liveblocks.triggerInboxNotification({
+                userId: email,
+                kind: '$documentAccess',
+                subjectId: notificationId,
+                activityData: {
+                    userType,
+                    title: `You have been granted ${userType} access to the document by ${updatedBy.name}.`,
+                    updatedBy: updatedBy.name,
+                    avatar: updatedBy.avatar,
+                    email: updatedBy.email
+                },
+                roomId
+            })
         }
 
         revalidatePath(`/documents/${roomId}`)

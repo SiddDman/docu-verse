@@ -60,7 +60,6 @@ const DeleteModal = ({ roomId }: DeleteModalProps) => {
                         undone.
                     </DialogDescription>
                 </DialogHeader>
-
                 <DialogFooter className="mt-5">
                     <DialogClose asChild className="w-full bg-dark-400 text-white">
                         Cancel
