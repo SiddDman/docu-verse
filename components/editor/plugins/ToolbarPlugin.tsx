@@ -19,7 +19,14 @@ import {
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
+  TextNode,
 } from 'lexical';
+import {
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  INSERT_CHECK_LIST_COMMAND,
+  REMOVE_LIST_COMMAND
+} from "@lexical/list";
 import {
   $createHeadingNode,
   $createQuoteNode,
@@ -37,6 +44,17 @@ import {
 } from 'react';
 
 const LowPriority = 1;
+const FONT_SIZES = ['8px', '10px', '12px', '14px', '16px', '18px', '24px', '36px', '48px', '72px'];
+const FONT_FAMILIES = ['Arial', 'Arial Black', 'Book Antiqua', 'Helvetica', 'Symbol', 'Times New Roman', 'Georgia', 'Verdana', 'Courier New', 'Tahoma', 'Comic Sans MS', 'Calibiri', 'Lucida Handwriting', 'Monotype Corsiva', 'Impact'];
+
+const blockTypeToBlockName = {
+  bullet: "Bulleted List",
+  number: "Numbered List",
+  check: "Check List",
+  paragraph: "Normal"
+};
+
+type BlockType = keyof typeof blockTypeToBlockName;
 
 function Divider() {
   return <div className="divider" />;
@@ -51,6 +69,9 @@ export default function ToolbarPlugin() {
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
+  const [fontSize, setFontSize] = useState<string>(FONT_SIZES[2]); // Default font size
+  const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILIES[0]); // Default font family
+  const [blockType, setBlockType] = useState<BlockType>('paragraph');
   const activeBlock = useActiveBlock();
 
   const $updateToolbar = useCallback(() => {
@@ -97,6 +118,52 @@ export default function ToolbarPlugin() {
       ),
     );
   }, [editor, $updateToolbar]);
+
+  const applyTextStyle = (style: string, value: string): void => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        selection.getNodes().forEach((node) => {
+          if (node instanceof TextNode) {
+            // Get existing styles and merge with the new one
+            const existingStyles = node.getStyle();
+            const newStyles = `${existingStyles} ${style}: ${value};`;
+            node.setStyle(newStyles.trim());
+          }
+        });
+      }
+    });
+  };
+
+  const applyFontSize = (size: string): void => {
+    applyTextStyle('font-size', size);
+  };
+
+  const applyFontFamily = (family: string): void => {
+    applyTextStyle('font-family', family);
+  };
+
+  // const formatList = (listType: BlockType) => {
+  //   editor.update(() => {
+  //     if (listType === 'number' && blockType !== 'number') {
+  //       console.log('Dispatching INSERT_ORDERED_LIST_COMMAND');
+  //       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+  //       setBlockType('number');
+  //     } else if (listType === 'bullet' && blockType !== 'bullet') {
+  //       console.log('Dispatching INSERT_UNORDERED_LIST_COMMAND');
+  //       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+  //       setBlockType('bullet');
+  //     } else if (listType === 'check' && blockType !== 'check') {
+  //       console.log('Dispatching INSERT_CHECK_LIST_COMMAND');
+  //       editor.dispatchCommand(INSERT_CHECK_LIST_COMMAND, undefined);
+  //       setBlockType('check');
+  //     } else {
+  //       console.log('Dispatching REMOVE_LIST_COMMAND');
+  //       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+  //       setBlockType('paragraph');
+  //     }
+  //   });
+  // };
 
   function toggleBlock(type: 'h1' | 'h2' | 'h3' | 'quote') {
     const selection = $getSelection();
@@ -210,6 +277,40 @@ export default function ToolbarPlugin() {
         <i className="format strikethrough" />
       </button>
       <Divider />
+      <select
+        className='bg-dark-100 text-gray-500 text-sm'
+        value={fontSize}
+        onChange={(e) => {
+          const newSize = e.target.value;
+          setFontSize(newSize);
+          applyFontSize(newSize);
+        }}
+        aria-label="Font Size"
+      >
+        {FONT_SIZES.map((size) => (
+          <option key={size} value={size}>
+            {size}
+          </option>
+        ))}
+      </select>
+      <Divider />
+      <select
+        className='bg-dark-100 text-gray-500 text-sm'
+        value={fontFamily}
+        onChange={(e) => {
+          const newFamily = e.target.value;
+          setFontFamily(newFamily);
+          applyFontFamily(newFamily);
+        }}
+        aria-label="Font Family"
+      >
+        {FONT_FAMILIES.map((family) => (
+          <option key={family} value={family}>
+            {family}
+          </option>
+        ))}
+      </select>
+      <Divider />
       <button
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
@@ -245,8 +346,33 @@ export default function ToolbarPlugin() {
         aria-label="Justify Align"
       >
         <i className="format justify-align" />
-      </button>{' '}
-    </div>
+      </button>
+      <Divider />
+      {/* <button
+        onClick={() => formatList('bullet')}
+        className={'toolbar-item spaced ' + (blockType === 'bullet' ? 'active' : '')}
+        aria-label="Bullet List"
+      >
+        <span className="text">Bullet List</span>
+      </button>
+      <Divider />
+      <button
+        onClick={() => formatList('number')}
+        className={'toolbar-item spaced ' + (blockType === 'number' ? 'active' : '')}
+        aria-label="Numbered List"
+      >
+        <span className="text">Numbered List</span>
+      </button>
+      <Divider />
+      <button
+        onClick={() => formatList('check')}
+        className={'toolbar-item spaced ' + (blockType === 'check' ? 'active' : '')}
+        aria-label="Check List"
+      >
+        <span className="text">Check List</span>
+      </button>
+      <Divider /> */}
+    </div >
   );
 }
 

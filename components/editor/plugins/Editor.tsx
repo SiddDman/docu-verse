@@ -10,6 +10,9 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { FloatingComposer, FloatingThreads, liveblocksConfig, LiveblocksPlugin, useEditorStatus } from '@liveblocks/react-lexical'
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import { ListItemNode, ListNode } from "@lexical/list";
 import Loader from '../../Loader';
 import FloatingToolbarPlugin from './FloatingToolbarPlugin';
 import { useThreads } from '@liveblocks/react/suspense';
@@ -30,7 +33,7 @@ export function Editor({ roomId, currentUserType }: { roomId: string, currentUse
 
   const initialConfig = liveblocksConfig({
     namespace: 'Editor',
-    nodes: [HeadingNode],
+    nodes: [HeadingNode, ListItemNode, ListNode],
     onError: (error: Error) => {
       console.error(error);
       throw error;
@@ -44,6 +47,8 @@ export function Editor({ roomId, currentUserType }: { roomId: string, currentUse
       <div className="editor-container size-full">
         <div className='toolbar-wrapper flex min-w-full justify-between'>
           <ToolbarPlugin />
+          <ListPlugin />
+          <CheckListPlugin />
           {currentUserType === 'editor' && <DeleteModal roomId={roomId} />}
         </div>
 
