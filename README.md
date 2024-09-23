@@ -1,4 +1,4 @@
-# DocuVerse
+# DocuVerse - Collaborative Text Editor
 
 DocuVerse is a collaborative text editor developed using Next.js, TypeScript, and Tailwind CSS. It features a responsive design that allows multiple users to edit documents in real-time. With rich text editing capabilities and robust user management, DocuVerse provides a seamless collaborative experience.
 
