@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# DocuVerse
 
-## Getting Started
+DocuVerse is a collaborative text editor developed using Next.js, TypeScript, and Tailwind CSS. It features a responsive design that allows multiple users to edit documents in real-time. With rich text editing capabilities and robust user management, DocuVerse provides a seamless collaborative experience.
 
-First, run the development server:
+## Table of Contents
+- [Features](#features)
+- [Liveblocks SDK](#liveblocks-sdk)
+- [Project Setup](#project-setup)
+- [Deployment](#deployment)
+- [Future Improvements](#future-improvements)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Real-time Collaboration:** Users can edit documents simultaneously, with changes reflected instantly.
+- **Rich Text Editing:** Integrated Lexical for advanced text formatting and editing capabilities.
+- **User Roles:** Supports different access levels with editor and viewer roles.
+- **Comment Functionality:** Users can leave comments within the editor interface.
+- **Shared Cursors and Avatars:** Visualize collaboration with shared cursors and avatars for active users.
+- **Notifications:** Receive alerts for mentions and document access.
+- **User Authentication:** Implemented secure authentication using Clerk.
+- **Bug Tracking:** Integrated Sentry for monitoring and tracking application bugs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Liveblocks SDK
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+DocuVerse utilizes the Liveblocks SDK to enhance real-time collaboration features, enabling:
+- **Shared Cursors:** See where other users are editing in real-time.
+- **Avatar Visibility:** Display avatars of active users within the document.
+- **Mentions and Notifications:** Get notified when mentioned in comments or document updates.
 
-## Learn More
+For more details about Liveblocks, visit the [official documentation](https://liveblocks.io/docs).
 
-To learn more about Next.js, take a look at the following resources:
+## Project Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To set up the project locally, follow these steps:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/SiddDman/docuverse.git
+    cd docuverse
+    ```
 
-## Deploy on Vercel
+2. **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Set up environment variables:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    Create a `.env.local` file in the root directory and add the required environment variables:
+
+    ```bash
+    NEXT_PUBLIC_CLERK_FRONTEND_API= <your-clerk-api-key>
+    CLERK_API_KEY= <your-backend-clerk-api-key>
+    LIVEBLOCKS_PUBLIC_API_KEY= <your-liveblocks-api-key>
+    ```
+
+4. **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+    The application will be running on `http://localhost:3000`.
+
+## Deployment
+You can view the live version of this project at [DocuVerse](https://docu-verse-sidd.vercel.app/).
+
+## Future Improvements
+
+- **Version History:** Implementing version control to track changes and revert to previous versions.
+- **Enhanced Commenting:** Allow threaded comments for better discussions.
+- **Document Templates:** Providing pre-defined document templates for users.
+- **Improved User Interface:** Continuously refining the UI for a better user experience.
